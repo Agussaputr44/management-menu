@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -22,9 +20,11 @@ class PrimaryController extends Controller
     {
         return view('login');
     }
+
     public function getDashboard()
     {
-        return view('dashboard');
+        $user = Auth::user();
+        return view('dashboard', compact('user'));
     }
 
     public function postRegister(Request $request)
@@ -32,13 +32,12 @@ class PrimaryController extends Controller
         // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_user' => 'required|string|max:30',
-            'username' => 'required|string|max:30|unique:user',
-            'email' => 'required|string|email|max:200|unique:user',
+            'username' => 'required|string|max:30|unique:users',
+            'email' => 'required|string|email|max:200|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'no_hp' => 'required|string|max:30',
             'wa' => 'required|string|max:30',
             'pin' => 'required|string|max:30',
-
         ]);
 
         if ($validator->fails()) {
@@ -76,30 +75,28 @@ class PrimaryController extends Controller
             'password' => 'required|string',
             'pin' => 'required|string',
         ]);
-    
+
         if (filter_var($credentials['username_email'], FILTER_VALIDATE_EMAIL)) {
             $fieldType = 'email';
         } else {
             $fieldType = 'username';
         }
-    
+
         if (Auth::attempt([$fieldType => $credentials['username_email'], 'password' => $credentials['password']])) {
             $user = Auth::user();
-    
+
             if ($user->pin !== $credentials['pin']) {
                 Auth::logout();
                 throw ValidationException::withMessages([
                     'pin' => ['The provided PIN is incorrect.'],
                 ]);
             }
-    
-            return redirect('/dashboard')->with('user', $user);
+
+            return redirect('/dashboard');
         }
-    
+
         throw ValidationException::withMessages([
             'username_email' => ['The provided credentials are incorrect.'],
         ]);
     }
-
-
 }
