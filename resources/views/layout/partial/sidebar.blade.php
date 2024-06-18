@@ -6,11 +6,11 @@
          </a>
          <ul class="mt-6">
              <li class="relative px-6 py-3">
-            
-                 <a id="mahasiswaLink"
+
+                 <a id="semuapengguna"
                      class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                     href="{{ url('/mahasiswa') }}">
-                     @if (Request::is('mahasiswa'))
+                     href="{{ url('/dashboard') }}">
+                     @if (Request::is('semuapengguna'))
                          <span id="sidebarLine"
                              class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
                              aria-hidden="true"></span>
@@ -21,7 +21,23 @@
                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                          </path>
                      </svg>
-                     <span class="ml-4">Mahasiswa</span>
+                     <span class="ml-4">Dashboard</span>
+                 </a>
+                 <a id="addUserLink"
+                     class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                     href="{{ url('/adduser') }}">
+                     @if (Request::is('addUser'))
+                         <span id="sidebarLine"
+                             class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                             aria-hidden="true"></span>
+                     @endif
+                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                         <path
+                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                         </path>
+                     </svg>
+                     <span class="ml-4">Tambah Pengguna</span>
                  </a>
              </li>
          </ul>
@@ -95,7 +111,7 @@
                      <span class="ml-4">Tables</span>
                  </a>
              </li> --}}
-             <li class="relative px-6 py-3">
+             {{-- <li class="relative px-6 py-3">
                  <button
                      class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                      @click="togglePagesMenu" aria-haspopup="true">
@@ -123,28 +139,28 @@
                          aria-label="submenu">
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/jadwalkuliah')}}">Jadwal Kuliah</a>
+                             <a class="w-full" href="{{ url('/perkuliahan/jadwalkuliah') }}">Jadwal Kuliah</a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/jadwalujian')}}">
+                             <a class="w-full" href="{{ url('/perkuliahan/jadwalujian') }}">
                                  Jadwal Ujian
                              </a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/absenmahasiswa')}}"">
-                                 Absen Mahasiswa
+                             <a class="w-full" href="{{ url('/perkuliahan/absenaddUser') }}"">
+                                 Absen addUser
                              </a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/nilaimahasiswa')}}">Nilai Mahasiswa</a>
+                             <a class="w-full" href="{{ url('/perkuliahan/nilaiaddUser') }}">Nilai addUser</a>
                          </li>
 
                      </ul>
                  </template>
-             </li>
+             </li> --}}
          </ul>
          <div class="px-6 my-6">
              <button
@@ -183,14 +199,23 @@
                  <!-- Add this classes to an active anchor (a tag) -->
                  <!-- text-gray-800 dark:text-gray-100 -->
                  <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                     href="{{ url('/mahasiswa') }}">
+                     href="{{ url('/dashboard') }}">
                      <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
                          stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                          <path
                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                          </path>
                      </svg>
-                     <span class="ml-4">Mahasiswa</span>
+                     <span class="ml-4">Dashboard</span>
+                 </a>
+                 <a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                     href="{{ url('/adduser') }}">                     <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                         <path
+                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                         </path>
+                     </svg>
+                     <span class="ml-4">Tambah Pengguna</span>
                  </a>
              </li>
          </ul>
@@ -264,7 +289,7 @@
                      <span class="ml-4">Tables</span>
                  </a>
              </li> --}}
-             <li class="relative px-6 py-3">
+             {{-- <li class="relative px-6 py-3">
                  <button
                      class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                      @click="togglePagesMenu" aria-haspopup="true">
@@ -292,28 +317,28 @@
                          aria-label="submenu">
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/jadwalkuliah')}}">Jadwal Kuliah</a>
+                             <a class="w-full" href="{{ url('/perkuliahan/jadwalkuliah') }}">Jadwal Kuliah</a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/jadwalujian')}}">
+                             <a class="w-full" href="{{ url('/perkuliahan/jadwalujian') }}">
                                  Jadwal Ujian
                              </a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/absenmahasiswa')}}">
-                                 Absen Mahasiswa
+                             <a class="w-full" href="{{ url('/perkuliahan/absenaddUser') }}">
+                                 Absen addUser
                              </a>
                          </li>
                          <li
                              class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                             <a class="w-full" href="{{url('/perkuliahan/nilaimahasiswa')}}">Nilai Mahasiswa</a>
+                             <a class="w-full" href="{{ url('/perkuliahan/nilaiaddUser') }}">Nilai addUser</a>
                          </li>
 
                      </ul>
                  </template>
-             </li>
+             </li> --}}
          </ul>
          <div class="px-6 my-6">
              <button

@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
 class PrimaryController extends Controller
 {
@@ -23,8 +24,16 @@ class PrimaryController extends Controller
 
     public function getDashboard()
     {
-        $user = Auth::user();
-        return view('dashboard', compact('user'));
+        // Mengambil semua data pengguna
+        $users = User::all();
+
+        // Mengirim data pengguna ke view 'dashboard'
+        return view('dashboard', compact('users'));
+    }
+    public function getAddUser()
+    {
+
+        return view('adduser');
     }
 
     public function postRegister(Request $request)
@@ -32,8 +41,8 @@ class PrimaryController extends Controller
         // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_user' => 'required|string|max:30',
-            'username' => 'required|string|max:30|unique:users',
-            'email' => 'required|string|email|max:200|unique:users',
+            'username' => 'required|string|max:30|unique:user',
+            'email' => 'required|string|email|max:200|unique:user',
             'password' => 'required|string|min:8|confirmed',
             'no_hp' => 'required|string|max:30',
             'wa' => 'required|string|max:30',
@@ -67,36 +76,27 @@ class PrimaryController extends Controller
         return redirect('/')->with('success', 'Registration successful! Please login.');
     }
 
-    public function postLogin(Request $request)
+    public function postLogin(Request $request): RedirectResponse
     {
-        // Validasi input
         $credentials = $request->validate([
-            'username_email' => 'required|string',
-            'password' => 'required|string',
-            'pin' => 'required|string',
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
-
-        if (filter_var($credentials['username_email'], FILTER_VALIDATE_EMAIL)) {
-            $fieldType = 'email';
-        } else {
-            $fieldType = 'username';
-        }
-
-        if (Auth::attempt([$fieldType => $credentials['username_email'], 'password' => $credentials['password']])) {
+    
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+    
+            // Mengambil data pengguna yang sedang login
             $user = Auth::user();
-
-            if ($user->pin !== $credentials['pin']) {
-                Auth::logout();
-                throw ValidationException::withMessages([
-                    'pin' => ['The provided PIN is incorrect.'],
-                ]);
-            }
-
-            return redirect('/dashboard');
+    
+            // Menyimpan data pengguna dalam session flash
+            $request->session()->put('user', $user);
+    
+            return redirect()->intended('/dashboard');
         }
-
-        throw ValidationException::withMessages([
-            'username_email' => ['The provided credentials are incorrect.'],
-        ]);
+    
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 }

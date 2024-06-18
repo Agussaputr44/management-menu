@@ -12,16 +12,12 @@
         <form action="/postlogin" method="POST">
             @csrf
             <div class="mb-4">
-                <label for="username_email" class="block text-gray-700">Username or Email:</label>
-                <input type="text" id="username_email" name="username_email" class="w-full p-2 border border-gray-300 rounded mt-1" required>
+                <label for="email" class="block text-gray-700">Email:</label>
+                <input type="text" id="email" name="email" class="w-full p-2 border border-gray-300 rounded mt-1" required>
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-gray-700">Password:</label>
                 <input type="password" id="password" name="password" class="w-full p-2 border border-gray-300 rounded mt-1" required>
-            </div>
-            <div class="mb-4">
-                <label for="pin" class="block text-gray-700">PIN:</label>
-                <input type="text" id="pin" name="pin" class="w-full p-2 border border-gray-300 rounded mt-1" required>
             </div>
             <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
         </form>
