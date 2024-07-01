@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -26,16 +27,16 @@ class PrimaryController extends Controller
     {
         // Mengambil semua data pengguna
         $users = User::all();
+        $menus = Menu::all();
 
         // Mengirim data pengguna ke view 'dashboard'
-        return view('dashboard', compact('users'));
+        return view('dashboard', compact('users', 'menus'));
     }
     public function getAddUser()
     {
 
         return view('adduser');
     }
-
     public function postRegister(Request $request)
     {
         // Validasi input
@@ -47,6 +48,7 @@ class PrimaryController extends Controller
             'no_hp' => 'required|string|max:30',
             'wa' => 'required|string|max:30',
             'pin' => 'required|string|max:30',
+            'id_level' => 'sometimes|string|max:3', // Add validation rule if needed
         ]);
 
         if ($validator->fails()) {
@@ -54,6 +56,9 @@ class PrimaryController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        // Determine id_level (default to '002' if not provided)
+        $id_level = $request->input('id_level', '002');
 
         // Membuat pengguna baru
         $user = User::create([
@@ -65,7 +70,7 @@ class PrimaryController extends Controller
             'no_hp' => $request->no_hp,
             'wa' => $request->wa,
             'pin' => $request->pin,
-            'id_jenis_user' => 'user',
+            'id_jenis_user' => $id_level,
             'status_user' => 'active',
             'delete_mark' => '0',
             'create_by' => $request->nama_user,
@@ -76,27 +81,52 @@ class PrimaryController extends Controller
         return redirect('/')->with('success', 'Registration successful! Please login.');
     }
 
+
     public function postLogin(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-    
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-    
-            // Mengambil data pengguna yang sedang login
+
             $user = Auth::user();
-    
-            // Menyimpan data pengguna dalam session flash
+
             $request->session()->put('user', $user);
-    
-            return redirect()->intended('/dashboard');
+
+            if ($user->id_jenis_user === '001') {
+                return redirect('/dashboard');
+            } else {
+                return redirect('/dashboard-user');
+            }
         }
-    
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ])->onlyInput('email');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+    public function deleteUser($id_user): RedirectResponse
+    {
+        // Temukan pengguna berdasarkan id_user
+        $user = User::find($id_user);
+
+        if ($user) {
+            $user->delete();
+            return redirect('/dashboard')->with('success', 'User deleted successfully.');
+        }
+
+        return redirect('/dashboard')->with('error', 'User not found.');
     }
 }
